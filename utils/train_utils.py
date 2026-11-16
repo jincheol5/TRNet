@@ -3,7 +3,9 @@ import random
 import pandas as pd
 import numpy as np
 import torch
+from typing import Literal
 from torch.utils.data import Dataset,DataLoader
+from graph import GNN_Graph
 from .sampling_utils import Sampler
 
 class TemporalGraphDataset(Dataset):
@@ -136,3 +138,21 @@ class TrainUtils:
             pre_TR_label=TR_label[batch_idx]
             TR_sample_loader.append(TR_sample)
         return TR_sample_loader
+
+    @staticmethod
+    def set_model_graph(
+            model_name:Literal[
+                "TGAT","TGN","CAW-N",
+                "GraphMixer","DyGFormer","TPNet"
+            ],
+            graph_df:pd.DataFrame,
+            **kwargs
+        ):
+        match model_name:
+            case "TGAT"|"TGN"|"GraphMixer"|"TPNet":
+                graph=GNN_Graph(graph_df=graph_df)
+            case "CAW-N":
+                pass
+            case "DyGFormer":
+                pass
+        return graph

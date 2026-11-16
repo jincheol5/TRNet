@@ -104,10 +104,14 @@ class GNN_Graph:
     def get_temporal_neighbor(self,
             tar:torch.Tensor,
             tar_t:torch.Tensor,
-            n_neighbor:int
+            n_neighbor:int,
+            include_current:bool=False
         ):
         """
-        TR prediction task에서는 query_time을 포함하여 모든 이전 이력들을 가져옴. 
+        두 가지 버전:
+        - 현재 시점까지 포함한 이력 조회 (1-hop temporal neighbor) -> include_current=True
+        - 현재 시점 이전의 이력 조회 (2-hop 이상의 temporal neighbor) -> include_current=False
+        - 두 버전 모두 query 시점의 eventstream 정보 기준
 
         가장 최근 neighbor가 항상 마지막 칸에 오도록 정렬 (TGN github 공식 구현 방식).
         예시:
@@ -118,6 +122,7 @@ class GNN_Graph:
             tar: [n_tar,]
             tar_t: [n_tar,]
             n_neighbor: int
+            include_current: bool
         Return:
             neighbor: [n_tar,n_neighbor]
             neighbor_mask: [n_tar,n_neighbor]
@@ -143,8 +148,13 @@ class GNN_Graph:
             if not neighbors:
                 continue
 
-            # t <= cut_time, 포함할 이력의 끝 인덱스
-            cut_idx=np.searchsorted(times,cut_time,side="right")
+            # include_current=True: t <= cut_time, 포함할 이력의 마지막 위치 인덱스
+            # include_current=True: t < cut_time, 포함할 이력의 첫 위치 인덱스
+            cut_idx=np.searchsorted(
+                times,
+                cut_time,
+                side="right" if include_current else "left"
+            )
 
             # 최근 n_neighbor개 선택
             start_idx=max(0,cut_idx-n_neighbor)
