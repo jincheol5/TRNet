@@ -5,7 +5,7 @@ import numpy as np
 import torch
 from typing import Literal
 from torch.utils.data import Dataset,DataLoader
-from graph import GNN_Graph
+from graph import GNN_Graph,CAW_N_Graph
 from .sampling_utils import Sampler
 
 class TemporalGraphDataset(Dataset):
@@ -152,7 +152,11 @@ class TrainUtils:
             case "TGAT"|"TGN"|"GraphMixer"|"TPNet":
                 graph=GNN_Graph(graph_df=graph_df)
             case "CAW-N":
-                pass
+                graph=CAW_N_Graph(
+                    graph_df=graph_df,
+                    n_walk=kwargs["n_walk"],
+                    walk_len=kwargs["walk_len"]
+                )
             case "DyGFormer":
                 pass
         return graph

@@ -77,7 +77,8 @@ def main(**kwargs):
     # set model graph
     graph=TrainUtils.set_model_graph(
         model_name=model_name,
-        graph_df=graph_df
+        graph_df=graph_df,
+        **specific_model_config
     )
     model.set_graph(graph=graph)
 

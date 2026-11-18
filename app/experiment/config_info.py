@@ -33,9 +33,8 @@ TGN
 - memory_updater: GRU
 
 CAW-N
-- n_walk: 64
+- n_walk: 32
 - walk_len: 2
-- alpha: 0.000001 (1e^-6)
 
 GraphMixer 
 - n_last_event: 50
@@ -105,9 +104,8 @@ SPECIFIC_MODEL_CONFIG={
         "msg_fn":"mlp"
     },
     "CAW-N":{
-        "n_walk":64,
-        "walk_len":2,
-        "alpha":1e-6
+        "n_walk":32,
+        "walk_len":2
     },
     "GraphMixer":{
         "n_last_event": 50,
@@ -151,7 +149,7 @@ MODEL_PARAM={
         "node_dim","edge_dim","time_dim",
         "latent_dim","embed_dim",
         "n_head",
-        "n_walk","walk_len","alpha",
+        "n_walk","walk_len"
     ),
     "GraphMixer":(
         "node_dim","edge_dim","time_dim",
