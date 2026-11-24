@@ -143,13 +143,14 @@ class TrainUtils:
     def set_model_graph(
             model_name:Literal[
                 "TGAT","TGN","CAW-N",
-                "GraphMixer","DyGFormer","TPNet"
+                "GraphMixer","DyGFormer","TPNet",
+                "ReaCH-TGN","TRNet"
             ],
             graph_df:pd.DataFrame,
             **kwargs
         ):
         match model_name:
-            case "TGAT"|"TGN"|"GraphMixer"|"TPNet":
+            case "TGAT"|"TGN"|"GraphMixer"|"TPNet"|"TRNet":
                 graph=GNN_Graph(graph_df=graph_df)
             case "CAW-N":
                 graph=CAW_N_Graph(

@@ -1,5 +1,12 @@
-from model import TGAT,TGN,CAW_N,GraphMixer,DyGFormer,TPNet,ReaCH_TGN
-from model_train import Model_Trainer,TGN_Trainer,TPNet_Trainer,ReaCH_TGN_Trainer
+from model import (
+    TGAT,TGN,CAW_N,
+    GraphMixer,DyGFormer,TPNet,
+    ReaCH_TGN,TRNet
+)
+from model_train import (
+    Model_Trainer,TGN_Trainer,TPNet_Trainer,
+    ReaCH_TGN_Trainer,TRNet_Trainer
+)
 
 """
 << 공통 하이퍼 파라미터 >>
@@ -57,6 +64,9 @@ ReaCH-TGN
 - msg_fn: concat
 - aggr_fn: last
 - memory_updater: GRU
+
+TRNet
+- info_dim: 172
 """
 
 DATASET_REGISTRY=[
@@ -73,7 +83,8 @@ MODEL_REGISTRY={
     "GraphMixer":GraphMixer,
     "DyGFormer":DyGFormer,
     "TPNet":TPNet,
-    "ReaCH-TGN":ReaCH_TGN
+    "ReaCH-TGN":ReaCH_TGN,
+    "TRNet":TRNet
 }
 
 TRAINER_REGISTRY={
@@ -83,7 +94,8 @@ TRAINER_REGISTRY={
     "GraphMixer":Model_Trainer,
     "DyGFormer":Model_Trainer,
     "TPNet":TPNet_Trainer,
-    "ReaCH-TGN":ReaCH_TGN_Trainer
+    "ReaCH-TGN":ReaCH_TGN_Trainer,
+    "TRNet":TRNet_Trainer
 }
 
 COMMON_MODEL_CONFIG={
@@ -108,7 +120,7 @@ SPECIFIC_MODEL_CONFIG={
         "walk_len":2
     },
     "GraphMixer":{
-        "n_last_event": 50,
+        "n_last_event":50,
     },
     "DyGFormer":{
         "co_dim":50,
@@ -128,6 +140,9 @@ SPECIFIC_MODEL_CONFIG={
         "mem_dim":172,
         "aggr_fn":"last",
         "msg_fn":"mlp"
+    },
+    "TRNet":{
+        "info_dim":172
     }
 }
 
@@ -175,6 +190,9 @@ MODEL_PARAM={
         "n_layer","n_neighbor","n_head",
         "msg_dim","mem_dim",
         "aggr_fn","msg_fn"
+    ),
+    "TRNet":(
+        "info_dim","latent_dim"
     )
 }
 
