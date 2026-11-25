@@ -144,13 +144,17 @@ class TGN(nn.Module):
             event_t:torch.Tensor
         ):
         ### embedding
-        embedded_vec=self.embedding(
-            src=src,
-            dst=dst,
-            event_t=event_t
-        )
-        src_vec=embedded_vec["src_vec"]
-        dst_vec=embedded_vec["dst_vec"]
+        # embedded_vec=self.embedding(
+        #     src=src,
+        #     dst=dst,
+        #     event_t=event_t
+        # )
+        # src_vec=embedded_vec["src_vec"]
+        # dst_vec=embedded_vec["dst_vec"]
+
+        ### memory only test
+        src_vec=self.memory.mem_vec[src]
+        dst_vec=self.memory.mem_vec[dst]
 
         ### decode 
         pair_vec=torch.concat([src_vec,dst_vec],dim=-1)

@@ -40,33 +40,50 @@ class Info(nn.Module):
         self.last_t.detach_()
 
 class Combiner(nn.Module):
-    """
-    Gated Combine
-    """
-    def __init__(self,
-            info_dim:int,
-            latent_dim:int    
-        ):
-        super().__init__()
-        self.combine_mlp=MLP(
-            input_dim=2*info_dim,
-            latent_dim=latent_dim,
-            output_dim=info_dim
-        )
-        self.gate=nn.Linear(2*info_dim,info_dim)
-        self.info_mlp=MLP(
-            input_dim=2*info_dim,
-            latent_dim=latent_dim,
-            output_dim=info_dim
-        )
+    # """
+    # Gated Combine
+    # """
+    # def __init__(self,
+    #         info_dim:int,
+    #         latent_dim:int    
+    #     ):
+    #     super().__init__()
+    #     self.combine_mlp=MLP(
+    #         input_dim=2*info_dim,
+    #         latent_dim=latent_dim,
+    #         output_dim=info_dim
+    #     )
+    #     self.gate=nn.Linear(2*info_dim,info_dim)
+    #     self.info_mlp=MLP(
+    #         input_dim=2*info_dim,
+    #         latent_dim=latent_dim,
+    #         output_dim=info_dim
+    #     )
 
-    def forward(self,
-            cur_info:torch.Tensor,
-            new_info:torch.Tensor
-        ):
-        concat_info=torch.cat([cur_info,new_info],dim=-1)
-        combined_info=self.combine_mlp(concat_info)
-        gate=torch.sigmoid(self.gate(concat_info))
-        gated_info=gate*combined_info
-        final_info=torch.cat([cur_info,gated_info])
-        return self.info_mlp(final_info)
+    # def forward(self,
+    #         cur_info:torch.Tensor,
+    #         new_info:torch.Tensor
+    #     ):
+    #     concat_info=torch.cat([cur_info,new_info],dim=-1)
+    #     combined_info=self.combine_mlp(concat_info)
+    #     gate=torch.sigmoid(self.gate(concat_info))
+    #     gated_info=gate*combined_info
+    #     final_info=torch.cat([cur_info,gated_info])
+    #     return self.info_mlp(final_info)
+    def __init__(self, info_dim: int, latent_dim: int):
+        super().__init__()
+
+        self.info_mlp = MLP(
+            input_dim=2 * info_dim,
+            latent_dim=latent_dim,
+            output_dim=info_dim
+        )
+        self.gate = nn.Linear(2 * info_dim, info_dim)
+
+    def forward(self, cur_info, new_info):
+        x = torch.cat([cur_info, new_info], dim=-1)
+
+        candidate = torch.tanh(self.info_mlp(x))
+        gate = torch.sigmoid(self.gate(x))
+
+        return (1 - gate) * cur_info + gate * candidate
