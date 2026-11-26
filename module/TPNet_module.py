@@ -28,6 +28,20 @@ class TPNet_Matrix(nn.Module):
         self.init_random_ft()
         self.init_last_t()
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def init_random_ft(self):
         """
         Node Representation Maintaining (NRM) 초기화.
